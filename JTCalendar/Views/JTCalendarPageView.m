@@ -158,7 +158,7 @@
 {
     CGFloat screenScale = [[UIScreen mainScreen] scale];
 
-    CGFloat height = 1.f / screenScale;
+    CGFloat height = 1.0f / screenScale;
     CGRect frame = CGRectMake(0, y, width, height);
     UIView *line = [[UIView alloc] initWithFrame:frame];
     line.backgroundColor = [UIColor colorWithRed:216./256. green:216./256. blue:216./256. alpha:1.];

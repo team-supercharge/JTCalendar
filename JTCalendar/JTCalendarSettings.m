@@ -27,7 +27,7 @@
     _pageViewNumberOfWeeks = 6;
     _pageViewHaveWeekDaysView = YES;
     _weekDayFormat = JTCalendarWeekDayFormatShort;
-    _zeroPaddedDayFormat = YES;
+    _zeroPaddedDayFormat = NO;
     _weekModeEnabled = NO;
     _pageViewWeekModeNumberOfWeeks = 1;
 }
