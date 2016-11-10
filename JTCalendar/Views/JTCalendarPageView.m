@@ -156,9 +156,12 @@
 
 - (void)createLineToPointY:(CGFloat)y withWidth:(CGFloat)width
 {
-    CGRect frame = CGRectMake(0, y, width, 1.f);
+    CGFloat screenScale = [[UIScreen mainScreen] scale];
+
+    CGFloat height = 1.f / screenScale;
+    CGRect frame = CGRectMake(0, y, width, height);
     UIView *line = [[UIView alloc] initWithFrame:frame];
-    line.backgroundColor = [UIColor lightGrayColor];
+    line.backgroundColor = [UIColor colorWithRed:216./256. green:216./256. blue:216./256. alpha:1.];
     [self addSubview:line];
 }
 
