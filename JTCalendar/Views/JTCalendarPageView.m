@@ -142,11 +142,24 @@
     }
     
     CGFloat weekHeight = (self.frame.size.height - y) / _numberOfWeeksDisplayed;
-    
+
+    [self createLineToPointY:y withWidth:weekWidth];
+
     for(UIView *weekView in _weeksViews){
         weekView.frame = CGRectMake(0, y, weekWidth, weekHeight);
         y += weekHeight;
+        [self createLineToPointY:y withWidth:weekWidth];
     }
+
+    [self createLineToPointY:y - 1 withWidth:weekWidth];
+}
+
+- (void)createLineToPointY:(CGFloat)y withWidth:(CGFloat)width
+{
+    CGRect frame = CGRectMake(0, y, width, 1.f);
+    UIView *line = [[UIView alloc] initWithFrame:frame];
+    line.backgroundColor = [UIColor lightGrayColor];
+    [self addSubview:line];
 }
 
 @end

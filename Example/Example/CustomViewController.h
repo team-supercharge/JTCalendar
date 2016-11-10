@@ -15,5 +15,7 @@
 @property (weak, nonatomic) IBOutlet JTHorizontalCalendarView *calendarContentView;
 
 @property (strong, nonatomic) JTCalendarManager *calendarManager;
+@property (weak, nonatomic) IBOutlet UIButton *prevButton;
+@property (weak, nonatomic) IBOutlet UIButton *nextButton;
 
 @end

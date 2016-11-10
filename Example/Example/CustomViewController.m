@@ -37,15 +37,16 @@
     _calendarManager.delegate = self;
     
     // Generate random events sort by date using a dateformatter for the demonstration
-    [self createRandomEvents];
-    
+//    [self createRandomEvents];
+
     _calendarMenuView.contentRatio = .75;
     _calendarManager.settings.weekDayFormat = JTCalendarWeekDayFormatSingle;
-    _calendarManager.dateHelper.calendar.locale = [NSLocale localeWithLocaleIdentifier:@"fr_FR"];
-    
+    _calendarManager.dateHelper.calendar.locale = [NSLocale currentLocale];
+
     [_calendarManager setMenuView:_calendarMenuView];
     [_calendarManager setContentView:_calendarContentView];
     [_calendarManager setDate:[NSDate date]];
+//    [self.view bringSubviewToFront:_prevButton];
 }
 
 #pragma mark - CalendarManager delegate
@@ -58,27 +59,30 @@
     
     // Other month
     if([dayView isFromAnotherMonth]){
-        dayView.hidden = YES;
+        dayView.hidden = NO;
+        dayView.textLabel.alpha = 0.5f;
+        dayView.textLabel.font = [UIFont fontWithName:@"Avenir-Light" size:16];
     }
     // Today
     else if([_calendarManager.dateHelper date:[NSDate date] isTheSameDayThan:dayView.date]){
         dayView.circleView.hidden = NO;
-        dayView.circleView.backgroundColor = [UIColor blueColor];
+        dayView.circleView.backgroundColor = [UIColor lightGrayColor];
         dayView.dotView.backgroundColor = [UIColor whiteColor];
         dayView.textLabel.textColor = [UIColor whiteColor];
     }
     // Selected date
     else if(_dateSelected && [_calendarManager.dateHelper date:_dateSelected isTheSameDayThan:dayView.date]){
         dayView.circleView.hidden = NO;
-        dayView.circleView.backgroundColor = [UIColor redColor];
+        dayView.circleView.backgroundColor = [UIColor orangeColor];
         dayView.dotView.backgroundColor = [UIColor whiteColor];
         dayView.textLabel.textColor = [UIColor whiteColor];
     }
     // Another day of the current month
     else{
         dayView.circleView.hidden = YES;
-        dayView.dotView.backgroundColor = [UIColor redColor];
+        dayView.dotView.backgroundColor = [UIColor orangeColor];
         dayView.textLabel.textColor = [UIColor blackColor];
+        dayView.textLabel.font = [UIFont fontWithName:@"Avenir-Medium" size:16];
     }
     
     if([self haveEventForDay:dayView.date]){
@@ -92,6 +96,7 @@
 - (void)calendar:(JTCalendarManager *)calendar didTouchDayView:(JTCalendarDayView *)dayView
 {
     _dateSelected = dayView.date;
+    NSLog(@"%@",_dateSelected);
     
     // Animation for the circleView
     dayView.circleView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.1, 0.1);
@@ -150,10 +155,19 @@
 - (UIView<JTCalendarWeekDay> *)calendarBuildWeekDayView:(JTCalendarManager *)calendar
 {
     JTCalendarWeekDayView *view = [JTCalendarWeekDayView new];
-    
+
+    int index = 0;
     for(UILabel *label in view.dayViews){
-        label.textColor = [UIColor blackColor];
         label.font = [UIFont fontWithName:@"Avenir-Light" size:14];
+        if (index == 5 || index == 6)
+        {
+            label.textColor = [UIColor colorWithRed:152./256. green:147./256. blue:157./256. alpha:.6];
+        }
+        else
+        {
+            label.textColor = [UIColor blackColor];
+        }
+        index++;
     }
     
     return view;
@@ -214,6 +228,28 @@
         
         [_eventsByDate[key] addObject:randomDate];
     }
+}
+
+- (IBAction)nextButtonClicked:(UIButton *)sender
+{
+    [_calendarContentView loadNextPageWithAnimation];
+    sender.userInteractionEnabled = NO;
+    double delayInSeconds = 0.5f;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        sender.userInteractionEnabled = YES;
+    });
+}
+
+- (IBAction)prevButtonClicked:(UIButton *)sender
+{
+    [_calendarContentView loadPreviousPageWithAnimation];
+    sender.userInteractionEnabled = NO;
+    double delayInSeconds = 0.5f;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        sender.userInteractionEnabled = YES;
+    });
 }
 
 @end
