@@ -10,12 +10,13 @@
 #import "JTCalendarManager.h"
 
 #define MAX_WEEKS_BY_MONTH 6
-
 @interface JTCalendarPageView (){
     UIView<JTCalendarWeekDay> *_weekDayView;
     NSMutableArray *_weeksViews;
     NSUInteger _numberOfWeeksDisplayed;
 }
+
+@property (nonatomic, strong) NSMutableArray *lines;
 
 @end
 
@@ -140,6 +141,16 @@
         _weekDayView.frame = CGRectMake(0, 0, weekWidth, weekDayHeight);
         y = weekDayHeight;
     }
+
+    if (!self.lines)
+    {
+        self.lines = [NSMutableArray new];
+    }
+
+    for (UIView *view in self.lines)
+    {
+        [view removeFromSuperview];
+    }
     
     CGFloat weekHeight = (self.frame.size.height - y) / _numberOfWeeksDisplayed;
 
@@ -163,6 +174,7 @@
     UIView *line = [[UIView alloc] initWithFrame:frame];
     line.backgroundColor = [UIColor colorWithRed:216./256. green:216./256. blue:216./256. alpha:1.];
     [self addSubview:line];
+    [self.lines addObject:line];
 }
 
 @end
